@@ -1,0 +1,307 @@
+1. let关键字
+
+（1）基本用法：let关键字用来声明变量，它的用法类似于var，都是用来声明变量。
+
+（2）块级作用域：let声明的变量，只在let关键字所在的代码块内有效。
+
+复制代码
+{
+  var a = 10;
+  let b = 10;
+}
+console.log(a);  //10
+console.log(b);  //error: b is not defined
+  
+var c = 10;
+{
+  var c = 20;
+}
+console.log(c);  //20
+  
+var d = 10;
+{
+  let d = 20;
+}
+console.log(d);  //10
+
+var i=0;
+for(var i=0; i<10; i++) {
+}
+console.log(i);  //10
+
+var j=0;
+for(let j=0; j<10; j++) {
+}
+console.log(j);  //0
+复制代码
+（3）不存在变量提升：let声明的变量一定要在声明后使用，否则会报错
+
+console.log(a);  //undefined
+console.log(b);  //error: b is not defined
+
+var a = 10;
+let b = 10;
+ 2. const关键字
+
+（1）基本用法：声明一个只读的常量。一旦声明，常量的值就不能改变。
+
+console.log(a);  //undefined
+console.log(b);  //error: b is not defined
+var a = 10;
+let b = 10;
+ （2）其他特性与var关键字一致
+
+ 3. 字符串拼接方法
+
+（1）基本用法：用反引号进行拼接 
+
+复制代码
+/*ES5中字符串处理方法*/
+var name = "Jack";
+var str1 = 'my name is ' + name;
+console.log(str1);  //my name is Jack
+
+/*ES6中字符串处理方法*/
+var str2 = `my name is ${name}`;
+console.log(str2);  //my name is Jack
+复制代码
+4. function函数
+
+（1）基本用法：默认参数
+
+复制代码
+/*ES5中函数默认参数处理方法*/
+function fn1(height) {
+    var height = height || 100;
+    console.log(height);
+}
+fn1();  //100
+
+/*ES6中直接在形参赋值进行设置默认参数*/
+function fn2(height = 100) {
+    console.log(height);
+}
+fn2();  //100
+复制代码
+（2）箭头函数
+
+复制代码
+/*ES5中定义一个函数变量*/
+var fn1 = function(height) {
+    console.log(height);
+}
+fn1(100);  //100
+
+/*ES6中用箭头函数定义函数变量*/
+var fn2 = (height) => {
+    console.log(height);
+}
+fn2(100);  //100
+复制代码
+复制代码
+/*箭头函数特性：箭头函数的this指针保持和外层指针一致*/
+var ele = document.getElementById('ele');  //获取某个元素，绑定点击事件
+ele.onclick = function() {
+    setTimeout(function() {
+        console.log(this);   //点击后，打印出window对象
+    }, 10)
+}
+ele.onclick = function() {
+    setTimeout(() ()=> {
+        console.log(this);   //点击后，打印出ele元素对象
+    }, 10)
+}
+复制代码
+复制代码
+/*箭头函数特性：箭头函数的argumets对象和外层一致*/
+function fn1(height) {
+    setTimeout(function() {
+        console.log(arguments);
+    }, 10)
+}
+function fn2(height) {
+    setTimeout(() => {
+        console.log(arguments);
+    }, 10)
+}
+fn1(100);  //[]
+fn2(100);  //[100]
+复制代码
+5. 变量的结构赋值
+
+（1）基本用法
+
+复制代码
+/*ES5初始化变量*/
+var a = 10;
+var b = 20;
+
+/*ES6解构赋初值*/
+var [a, b] = [10, 20];
+复制代码
+复制代码
+/*ES5获取对象的key值*/
+var obj1 = {
+    username1: 'jack',
+    password1: 123
+}
+var username1 = obj1.username1;
+var password1 = obj1.password1;
+console.log(username1, password1);
+
+/*ES6通过解构拆包获取对象的key值*/
+var obj2 = {
+    username2: 'jack',
+    password2: 123
+}
+var {username2, password2} = obj2;
+console.log(username2, password2);
+复制代码
+/*字符串的解构赋值*/
+var [a, b, c, d, e] = 'hello';
+console.log(a, b, c, d, e);  //h e l l o
+/*数组的解构赋值*/
+var [a, b, c] = ['hello', 'world'];
+console.log(a, b, c);  //hello world
+6. …拓展操作符
+
+ （1）基本用法
+
+复制代码
+//合并数组
+var arry = ['a', 'b'];
+var arry1 = arry.concat(['c']);  //ES5数组拼接
+var arry2 = [...arry, 'c'];  //ES6...操作符拼接数组
+console.log(arry1); //['a', 'b', 'c']
+console.log(arry2);  //['a', 'b', 'c']
+
+//合并对象
+var obj = {a: 1, b: 2};
+var obj1 = {...obj, c: 3};
+var obj2 = {...obj, a: 3};
+console.log(obj1) ; // {a: 1, b: 2, c: 3}
+console.log(obj2) ; // {a: 99, b: 2}
+复制代码
+/*拆分字符串*/
+console.log([...'hello']); // [ "h", "e", "l", "l", "o" ]
+复制代码
+/*合并成数组*/
+function mergeArr(...Arrys) {
+    console.log(arguments);
+}
+mergeArr('a', 'b', 'c');  //['a', 'b', 'c'];
+
+/*拆分数组*/
+console.log(...['a', 'b', 'c']);  //a b c
+复制代码
+复制代码
+function fn1() {
+    var arry = Array.prototype.sort.call(arguments, function(a, b) {
+        return a - b;
+    })
+    console.log(arry);
+}
+fn1(3,1,5,3,8,6);  //1 3 3 5 6 8
+
+/*...操作符将类数组转换为数组*/
+function fn2() {
+    var arry = [...arguments].sort(function(a, b) {
+        return a - b;
+    })
+    console.log(arry);
+}
+fn2(3,1,5,3,8,6);  //1 3 3 5 6 8
+复制代码
+7. 对象的一些实用方法
+
+（1）Object.is()：判断两个值是否相等，ES5比较两个值是否相等，只有两个运算符：相等运算符（==）和严格相等运算符（===）。它们都有缺点，前者会自动转换数据类型，后者的NaN不等于自身，以及+0等于-0。
+
+console.log(+0 === -0)  //true，错误结果
+console.log(NaN === NaN)  //false，错误结果
+console.log(Object.is(+0, -0)) // false，正确结果
+console.log(Object.is(NaN, NaN)) // true，正确结果
+/*普通值的比较*/
+console.log(Object.is('foo', 'foo')) //true
+console.log(Object.is({}, {}))  //false
+（1）Object.assign()：合并对象的方法，将源对象（source）的所有可枚举属性，复制到目标对象（target）。
+
+/*使用方法*/
+var target = {a: 1, b: 1 };
+var source = {c: 1};
+console.log(Object.assign(target, source));  //{a: 1, b: 1, c: 1}
+/*如果目标对象与源对象有同名属性，或多个源对象有同名属性，则后面的属性会覆盖前面的属性*/
+var target = {a: 1, b: 1 };
+var source = {a: 20, c: 1};
+console.log(Object.assign(target, source));  //{a: 20, b: 1, c: 1}
+复制代码
+/*运用：克隆对象*/
+function clone(origin) {
+  return Object.assign({}, origin);
+}
+var obj1 = {
+    a: 2
+}
+var obj2 = clone(obj1);
+console.log(obj2);  //{a: 2}
+
+/*注意：Object.assign方法实行的是浅拷贝，而不是深拷贝。也就是说，如果源对象某个属性的值是对象，那么目标对象拷贝得到的是这个对象的引用。*/
+var obj1 = {a: {b: 1}, c: 1};
+var obj2 = Object.assign({}, obj1);
+obj2.a.b = 100;
+obj2.c = 200;
+console.log(obj1);  //{a: {b: 100}, c: 1}
+复制代码
+/*运用：合并对象*/
+var merge = (...sources) => Object.assign({}, ...sources);
+console.log(merge({a: 1}, {b: 2}, {a: 3, c :3}));  //{a: 3, b: 2, c: 3}
+8. promise对象
+
+（1）定义：一种异步函数的解决方案,避免了异步函数层层嵌套,将原来异步函数转换 为便于理解和阅读的链式步骤关系
+
+（2）三种状态:Pending(进行中)、Resoloved(已完成)、Rejected(已失败)。
+
+（3）两种结果:Pending->Resoloved（成功）; Pending->Rejected（失败）。
+
+（4）then方法:第一个参数是成功时调用的函数,第二个参数是失败时调用的函数。
+
+（5）通常形式。
+
+复制代码
+var promise = new Promise((reslove, reject) => {
+    if(条件成立) ｛
+        /*Pending->Resoloved（成功*/
+        reslove(); 
+    }else {
+        /*Pending->Rejected（失败）*/
+        reject();
+    }
+})
+复制代码
+复制代码
+/*运用：隔1s打印‘hello’，隔2s打印‘world’*/
+
+/*ES5实现方法*/
+setTimeout(function(){
+    console.log('hello')
+      setTimeout(function(){
+        console.log('world')
+      }, 1000)
+}, 1000)  
+
+/*Promise实现方法*/
+var wait1000 = (str) => {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            resolve(str);
+        }, 1000)
+    })
+}
+
+wait1000('hello').then((data) => {
+    console.log(data);
+    return wait1000('world');
+}, () => {
+    console.log('err');
+}).then((data) => {
+    console.log(data);
+})
